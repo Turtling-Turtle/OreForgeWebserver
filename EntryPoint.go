@@ -1,43 +1,31 @@
 package main
 
 import (
+	"OreForgeWebserver/UserContent"
 	"encoding/json"
 	"fmt"
 )
 
-type Person struct {
-	Name string
-	Age  int32
-}
-
-type Tier string
-
-const (
-	Common = iota
-	Uncommon
-	Rare
-	SuperRare
-	Epic
-	Prestige
-	Exotic
-	Pinnacle
-)
-
-type CommonData struct {
-	Name            string
-	Description     string
-	Tier            Tier
-	Id              string
-	IsPrestigeProof bool
-	Rarity          float32
-	IsShopItem      bool
-	ItemValue       float64
-}
-
 func main() {
 
-	var person Person
-	jsonData := `{"name":"Nathan","age":30}`
-	json.Unmarshal([]byte(jsonData), &person)
-	fmt.Printf("Name: %s, Age: %d", person.Name, person.Age)
+	commonData := UserContent.CommonItemData{
+		Name:            "Test Item",
+		Description:     "Test Description",
+		Tier:            UserContent.EPIC,
+		Id:              "testing123",
+		IsPrestigeProof: true,
+		Rarity:          1,
+		IsShopItem:      false,
+		ItemValue:       0,
+	}
+
+	jsonData, err := json.Marshal(commonData)
+	if err != nil {
+		return
+	}
+
+	var storedData UserContent.CommonItemData
+	fmt.Printf("JSON FORM: %s\n", string(jsonData))
+	json.Unmarshal(jsonData, &storedData)
+	fmt.Printf("Name: %s, Tier: %s\n", storedData.Name, storedData.Tier)
 }
